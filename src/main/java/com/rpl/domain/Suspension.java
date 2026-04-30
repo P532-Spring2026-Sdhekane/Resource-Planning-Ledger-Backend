@@ -1,5 +1,6 @@
 package com.rpl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 
@@ -30,6 +31,7 @@ public class Suspension {
     }
 
     public Long getId() { return id; }
+    @JsonIgnore
     public ProposedAction getProposedAction() { return proposedAction; }
     public String getReason() { return reason; }
     public LocalDate getStartDate() { return startDate; }

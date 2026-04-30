@@ -1,6 +1,7 @@
 package com.rpl.domain;
 
 import com.rpl.domain.composite.ActionStatus;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -33,6 +34,7 @@ public class ImplementedAction {
     }
 
     public Long getId() { return id; }
+    @JsonIgnore
     public ProposedAction getProposedAction() { return proposedAction; }
     public void setProposedAction(ProposedAction pa) { this.proposedAction = pa; }
     public LocalDateTime getActualStart() { return actualStart; }
