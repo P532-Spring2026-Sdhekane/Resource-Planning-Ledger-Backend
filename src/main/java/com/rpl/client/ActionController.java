@@ -63,4 +63,10 @@ public class ActionController {
         String assetId = (String) body.get("assetId");
         return actionManager.addAllocation(id, resourceTypeId, quantity, kind, assetId);
     }
+
+    @DeleteMapping("/{id}/allocations/{allocId}")
+    public ProposedAction deleteAllocation(@PathVariable Long id,
+                                           @PathVariable Long allocId) {
+        return actionManager.deleteAllocation(id, allocId);
+    }
 }

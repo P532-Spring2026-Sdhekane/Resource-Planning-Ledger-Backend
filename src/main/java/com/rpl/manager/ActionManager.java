@@ -257,6 +257,13 @@ public class ActionManager implements ActionContext.LedgerCallback {
         return actionRepository.save(action);
     }
 
+    public ProposedAction deleteAllocation(Long actionId, Long allocId) {
+        ProposedAction action = findById(actionId);
+        action.getAllocations().removeIf(a -> a.getId().equals(allocId));
+        allocationRepository.deleteById(allocId);
+        return actionRepository.save(action);
+    }
+
     private void auditLog(String event, Long actionId, String details) {
         AuditLogEntry log = new AuditLogEntry(event, actionId, details);
         auditLogRepository.save(log);
