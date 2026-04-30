@@ -1,5 +1,6 @@
 package com.rpl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,7 +30,7 @@ public class ResourceAllocation {
     @Column(nullable = false)
     private AllocationKind kind = AllocationKind.GENERAL;
 
-    private String assetId;      
+    private String assetId;       // for SPECIFIC kind
     private LocalDate periodStart;
     private LocalDate periodEnd;
 
@@ -42,6 +43,7 @@ public class ResourceAllocation {
     }
 
     public Long getId() { return id; }
+    @JsonIgnore
     public ProposedAction getAction() { return action; }
     public void setAction(ProposedAction action) { this.action = action; }
     public ResourceType getResourceType() { return resourceType; }

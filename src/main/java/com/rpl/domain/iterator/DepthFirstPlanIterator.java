@@ -8,6 +8,11 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
+/**
+ * Iterator pattern: depth-first traversal of PlanNode composite tree.
+ * Operates on already-loaded in-memory PlanNode objects — no DB queries inside next().
+ * Clients must use this iterator; they must not recurse manually into children.
+ */
 public class DepthFirstPlanIterator implements Iterator<PlanNode> {
 
     private final Deque<PlanNode> stack = new ArrayDeque<>();
@@ -27,6 +32,7 @@ public class DepthFirstPlanIterator implements Iterator<PlanNode> {
 
         PlanNode node = stack.pop();
 
+        // Push children in reverse order so left-to-right traversal is maintained
         if (node instanceof Plan plan) {
             List<PlanNode> children = plan.getAllChildren();
             for (int i = children.size() - 1; i >= 0; i--) {

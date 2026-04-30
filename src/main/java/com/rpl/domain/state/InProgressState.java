@@ -3,7 +3,10 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Stateless singleton bean representing IN_PROGRESS state.
+ * Legal transitions: complete(), suspend(), abandon().
+ */
 @Component
 public class InProgressState implements ActionState {
 

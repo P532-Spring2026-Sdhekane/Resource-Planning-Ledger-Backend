@@ -9,6 +9,10 @@ import java.math.BigDecimal;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Concrete Template Method subclass for CONSUMABLE resources.
+ * Selects only CONSUMABLE allocations and validates positive quantities.
+ */
 @Component
 public class ConsumableLedgerEntryGenerator extends AbstractLedgerEntryGenerator {
 

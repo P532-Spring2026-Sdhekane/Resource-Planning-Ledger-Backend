@@ -18,7 +18,7 @@ public class PostingRule {
     @JoinColumn(name = "output_account_id", nullable = false)
     private Account outputAccount;
 
-    private String strategyType; 
+    private String strategyType;  // e.g., "OVER_CONSUMPTION_ALERT"
 
     public PostingRule() {}
 

@@ -2,7 +2,10 @@ package com.rpl.domain.state;
 
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Stateless singleton bean representing COMPLETED state (terminal).
+ * No transitions allowed.
+ */
 @Component
 public class CompletedState implements ActionState {
 

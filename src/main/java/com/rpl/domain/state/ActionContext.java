@@ -3,7 +3,12 @@ package com.rpl.domain.state;
 import com.rpl.domain.ProposedAction;
 import com.rpl.domain.composite.ActionStatus;
 
-
+/**
+ * ActionContext wraps the ProposedAction entity (mutable data)
+ * and a callback interface to the ActionManager so that state transitions
+ * can trigger ledger operations without creating a circular dependency.
+ * State objects are stateless singletons; all mutation goes through here.
+ */
 public class ActionContext {
 
     public interface LedgerCallback {

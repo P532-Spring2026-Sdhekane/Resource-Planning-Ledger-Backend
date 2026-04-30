@@ -1,5 +1,6 @@
 package com.rpl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +24,7 @@ public class ProtocolStep {
     @JoinColumn(name = "sub_protocol_id")
     private Protocol subProtocol;
 
-  
+    // Dependency step names within same parent protocol
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "protocol_step_deps", joinColumns = @JoinColumn(name = "step_id"))
     @Column(name = "depends_on_step_name")
@@ -36,6 +37,7 @@ public class ProtocolStep {
     }
 
     public Long getId() { return id; }
+    @JsonIgnore
     public Protocol getProtocol() { return protocol; }
     public void setProtocol(Protocol protocol) { this.protocol = protocol; }
     public String getName() { return name; }

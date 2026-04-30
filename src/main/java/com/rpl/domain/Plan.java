@@ -9,7 +9,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Composite node in the Composite pattern.
+ * Derives its status from its children's statuses.
+ * Children can be Plan (sub-plan) or ProposedAction (leaf).
+ */
 @Entity
 @Table(name = "plans")
 public class Plan implements PlanNode {
@@ -31,9 +35,11 @@ public class Plan implements PlanNode {
     @JoinColumn(name = "parent_plan_id")
     private Plan parentPlan;
 
+    // Sub-plan children
     @OneToMany(mappedBy = "parentPlan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Plan> subPlans = new ArrayList<>();
 
+    // Leaf children
     @OneToMany(mappedBy = "plan", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<ProposedAction> actions = new ArrayList<>();
 
@@ -43,6 +49,7 @@ public class Plan implements PlanNode {
         this.name = name;
     }
 
+    // --- PlanNode interface (Composite pattern) ---
 
     @Override
     public Long getId() { return id; }
@@ -53,6 +60,14 @@ public class Plan implements PlanNode {
     @Override
     public String getNodeType() { return "PLAN"; }
 
+    /**
+     * Derived status from children:
+     * - COMPLETED if all children completed
+     * - IN_PROGRESS if any child is IN_PROGRESS or COMPLETED (not all completed)
+     * - SUSPENDED if any child is SUSPENDED and none IN_PROGRESS
+     * - ABANDONED if all children abandoned
+     * - PROPOSED otherwise
+     */
     @Override
     public ActionStatus getStatus() {
         List<PlanNode> children = getAllChildren();
@@ -85,7 +100,7 @@ public class Plan implements PlanNode {
         visitor.visitComposite(this);
     }
 
-
+    /** Returns all children (sub-plans + leaf actions) as PlanNode list. */
     public List<PlanNode> getAllChildren() {
         List<PlanNode> all = new ArrayList<>();
         all.addAll(subPlans);
@@ -93,6 +108,7 @@ public class Plan implements PlanNode {
         return all;
     }
 
+    // --- Getters / setters ---
 
     public void setName(String name) { this.name = name; }
     public Protocol getSourceProtocol() { return sourceProtocol; }

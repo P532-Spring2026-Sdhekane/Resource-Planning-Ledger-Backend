@@ -3,7 +3,10 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Stateless singleton bean representing PROPOSED state.
+ * Legal transitions: implement(), suspend(), abandon().
+ */
 @Component
 public class ProposedState implements ActionState {
 

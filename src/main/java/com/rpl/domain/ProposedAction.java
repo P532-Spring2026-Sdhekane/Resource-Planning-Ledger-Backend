@@ -1,5 +1,6 @@
 package com.rpl.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.rpl.domain.composite.ActionStatus;
 import com.rpl.domain.composite.PlanNode;
 import com.rpl.domain.composite.PlanNodeVisitor;
@@ -9,7 +10,11 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-
+/**
+ * Leaf node in the Composite tree.
+ * Holds mutable status managed by the State pattern (ActionStateMachine).
+ * Status is persisted as a string; the state object is resolved at runtime.
+ */
 @Entity
 @Table(name = "proposed_actions")
 public class ProposedAction implements PlanNode {
@@ -46,7 +51,7 @@ public class ProposedAction implements PlanNode {
     @OneToMany(mappedBy = "proposedAction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Suspension> suspensions = new ArrayList<>();
 
-   
+    // Dependency references within the plan (stored as action names)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "action_dependencies", joinColumns = @JoinColumn(name = "action_id"))
     @Column(name = "depends_on_name")
@@ -58,6 +63,7 @@ public class ProposedAction implements PlanNode {
         this.name = name;
     }
 
+    // --- PlanNode interface ---
 
     @Override
     public Long getId() { return id; }
@@ -84,8 +90,10 @@ public class ProposedAction implements PlanNode {
         visitor.visitLeaf(this);
     }
 
+    // --- Getters / setters ---
 
     public void setName(String name) { this.name = name; }
+    @JsonIgnore
     public Plan getPlan() { return plan; }
     public void setPlan(Plan plan) { this.plan = plan; }
     public Protocol getProtocol() { return protocol; }

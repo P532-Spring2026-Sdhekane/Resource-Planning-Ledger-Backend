@@ -3,7 +3,10 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-
+/**
+ * Stateless singleton bean representing SUSPENDED state.
+ * Legal transitions: resume(), abandon().
+ */
 @Component
 public class SuspendedState implements ActionState {
 
