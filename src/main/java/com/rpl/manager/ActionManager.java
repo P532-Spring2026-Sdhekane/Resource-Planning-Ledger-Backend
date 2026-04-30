@@ -12,7 +12,11 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-
+/**
+ * Manager layer: orchestrates action lifecycle use cases.
+ * Uses the State pattern (ActionStateMachine) to drive transitions.
+ * Implements LedgerCallback so state objects can trigger ledger operations.
+ */
 @Service
 @Transactional
 public class ActionManager implements ActionContext.LedgerCallback {
@@ -29,6 +33,7 @@ public class ActionManager implements ActionContext.LedgerCallback {
     private final ResourceAllocationRepository allocationRepository;
     private final com.rpl.repository.ResourceTypeRepository resourceTypeRepository;
 
+    // State singleton beans (injected by Spring)
     private final ProposedState proposedState;
     private final SuspendedState suspendedState;
     private final InProgressState inProgressState;
@@ -93,7 +98,7 @@ public class ActionManager implements ActionContext.LedgerCallback {
         ActionContext ctx = contextFor(action);
         resolveState(action).implement(ctx);
 
-
+        // Create ImplementedAction
         ImplementedAction ia = new ImplementedAction(action);
         ia = implementedActionRepository.save(ia);
         action.setImplementedAction(ia);
@@ -139,22 +144,30 @@ public class ActionManager implements ActionContext.LedgerCallback {
         return action;
     }
 
+    // --- LedgerCallback implementations ---
 
     @Override
     public void onComplete(ProposedAction action) {
         ImplementedAction ia = action.getImplementedAction();
         if (ia == null) return;
 
-        
+        // Skip ledger posting if no allocations (action has no resources to track)
+        if (action.getAllocations().isEmpty()) {
+            ia.setStatus(ActionStatus.COMPLETED);
+            implementedActionRepository.save(ia);
+            return;
+        }
+
+        // Use Template Method to generate entries
         Transaction tx = ledgerGenerator.generateEntries(ia);
 
-    
+        // Persist entries and update account balances
         for (Entry entry : tx.getEntries()) {
             Account account = entry.getAccount();
             if (entry.getEntryType() == Entry.EntryType.WITHDRAWAL) {
                 account.debit(entry.getAmount().abs());
             } else {
-               
+                // For deposits to usage account, find or create usage account
                 if (entry.getNotes() != null && entry.getNotes().startsWith("usage:")) {
                     Long rtId = Long.parseLong(entry.getNotes().split(":")[1]);
                     Account usageAccount = findOrCreateUsageAccount(rtId, action);
@@ -165,13 +178,13 @@ public class ActionManager implements ActionContext.LedgerCallback {
             }
             accountRepository.save(account);
 
-           
+            // Check posting rules (over-consumption alert)
             checkPostingRules(account, entry, action);
         }
 
         transactionRepository.save(tx);
 
-    
+        // Update implemented action status
         ia.setStatus(ActionStatus.COMPLETED);
         implementedActionRepository.save(ia);
     }
@@ -184,7 +197,7 @@ public class ActionManager implements ActionContext.LedgerCallback {
 
     @Override
     public void onResume(ProposedAction action) {
-       
+        // Close open suspensions
         List<Suspension> open = suspensionRepository.findByProposedActionId(action.getId());
         open.stream()
             .filter(s -> s.getEndDate() == null)
@@ -200,7 +213,7 @@ public class ActionManager implements ActionContext.LedgerCallback {
             .filter(a -> a.getName().equals(name))
             .findFirst()
             .orElseGet(() -> {
-              
+                // Get resource type from allocations
                 ResourceType rt = action.getAllocations().stream()
                     .filter(al -> al.getResourceType().getId().equals(resourceTypeId))
                     .map(ResourceAllocation::getResourceType)
