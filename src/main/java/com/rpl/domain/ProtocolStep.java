@@ -24,17 +24,13 @@ public class ProtocolStep {
     @JoinColumn(name = "sub_protocol_id")
     private Protocol subProtocol;
 
-    // Dependency step names within same parent protocol
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "protocol_step_deps", joinColumns = @JoinColumn(name = "step_id"))
     @Column(name = "depends_on_step_name")
     private List<String> dependsOn = new ArrayList<>();
 
     public ProtocolStep() {}
-
-    public ProtocolStep(String name) {
-        this.name = name;
-    }
+    public ProtocolStep(String name) { this.name = name; }
 
     public Long getId() { return id; }
     @JsonIgnore

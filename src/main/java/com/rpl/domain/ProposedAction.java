@@ -10,11 +10,6 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Leaf node in the Composite tree.
- * Holds mutable status managed by the State pattern (ActionStateMachine).
- * Status is persisted as a string; the state object is resolved at runtime.
- */
 @Entity
 @Table(name = "proposed_actions")
 public class ProposedAction implements PlanNode {
@@ -51,31 +46,18 @@ public class ProposedAction implements PlanNode {
     @OneToMany(mappedBy = "proposedAction", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Suspension> suspensions = new ArrayList<>();
 
-    // Dependency references within the plan (stored as action names)
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "action_dependencies", joinColumns = @JoinColumn(name = "action_id"))
     @Column(name = "depends_on_name")
     private List<String> dependsOnNames = new ArrayList<>();
 
     public ProposedAction() {}
+    public ProposedAction(String name) { this.name = name; }
 
-    public ProposedAction(String name) {
-        this.name = name;
-    }
-
-    // --- PlanNode interface ---
-
-    @Override
-    public Long getId() { return id; }
-
-    @Override
-    public String getName() { return name; }
-
-    @Override
-    public String getNodeType() { return "LEAF"; }
-
-    @Override
-    public ActionStatus getStatus() { return statusEnum; }
+    @Override public Long getId() { return id; }
+    @Override public String getName() { return name; }
+    @Override public String getNodeType() { return "LEAF"; }
+    @Override public ActionStatus getStatus() { return statusEnum; }
 
     @Override
     public BigDecimal getTotalAllocatedQuantity(ResourceType resourceType) {
@@ -86,11 +68,7 @@ public class ProposedAction implements PlanNode {
     }
 
     @Override
-    public void accept(PlanNodeVisitor visitor) {
-        visitor.visitLeaf(this);
-    }
-
-    // --- Getters / setters ---
+    public void accept(PlanNodeVisitor visitor) { visitor.visitLeaf(this); }
 
     public void setName(String name) { this.name = name; }
     @JsonIgnore

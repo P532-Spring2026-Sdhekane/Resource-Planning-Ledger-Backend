@@ -47,11 +47,6 @@ public class Account {
     public BigDecimal getBalance() { return balance; }
     public void setBalance(BigDecimal balance) { this.balance = balance; }
 
-    public void credit(BigDecimal amount) {
-        this.balance = this.balance.add(amount);
-    }
-
-    public void debit(BigDecimal amount) {
-        this.balance = this.balance.subtract(amount);
-    }
+    public void credit(BigDecimal amount) { this.balance = this.balance.add(amount); }
+    public void debit(BigDecimal amount) { this.balance = this.balance.subtract(amount); }
 }

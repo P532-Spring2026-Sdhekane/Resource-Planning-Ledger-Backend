@@ -32,7 +32,6 @@ public class Entry {
     private LocalDateTime chargedAt;
     private LocalDateTime bookedAt;
 
-    // Which action triggered this
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "originating_action_id")
     private ProposedAction originatingAction;
@@ -40,9 +39,7 @@ public class Entry {
     @Column(columnDefinition = "TEXT")
     private String notes;
 
-    public Entry() {
-        this.bookedAt = LocalDateTime.now();
-    }
+    public Entry() { this.bookedAt = LocalDateTime.now(); }
 
     public Long getId() { return id; }
     @JsonIgnore
