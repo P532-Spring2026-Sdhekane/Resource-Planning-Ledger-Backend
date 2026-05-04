@@ -3,11 +3,6 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-/**
- * Week 2 - Change 1: New state entered via reopen() from COMPLETED.
- * Legal transitions: complete() -> COMPLETED (re-posts ledger), abandon() -> ABANDONED.
- * Reopening creates reversal entries to restore pool balance.
- */
 @Component
 public class ReopenedState implements ActionState {
 

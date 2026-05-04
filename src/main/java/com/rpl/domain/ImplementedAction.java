@@ -35,6 +35,7 @@ public class ImplementedAction {
 
     public Long getId() { return id; }
     @JsonIgnore
+    @JsonIgnore
     public ProposedAction getProposedAction() { return proposedAction; }
     public void setProposedAction(ProposedAction pa) { this.proposedAction = pa; }
     public LocalDateTime getActualStart() { return actualStart; }

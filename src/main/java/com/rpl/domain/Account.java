@@ -1,6 +1,7 @@
 package com.rpl.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 
@@ -41,6 +42,7 @@ public class Account {
     public void setName(String name) { this.name = name; }
     public Kind getKind() { return kind; }
     public void setKind(Kind kind) { this.kind = kind; }
+    @JsonIgnore
     @JsonIgnore
     public ResourceType getResourceType() { return resourceType; }
     public void setResourceType(ResourceType resourceType) { this.resourceType = resourceType; }

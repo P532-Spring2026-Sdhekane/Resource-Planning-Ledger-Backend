@@ -1,11 +1,9 @@
 package com.rpl.domain.iterator;
 
 import com.rpl.domain.composite.PlanNode;
-
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.function.Predicate;
-
 
 public class FilteredPlanIterator implements Iterator<PlanNode> {
 
@@ -23,15 +21,11 @@ public class FilteredPlanIterator implements Iterator<PlanNode> {
         next = null;
         while (inner.hasNext()) {
             PlanNode candidate = inner.next();
-            if (predicate.test(candidate)) {
-                next = candidate;
-                break;
-            }
+            if (predicate.test(candidate)) { next = candidate; break; }
         }
     }
 
-    @Override
-    public boolean hasNext() { return next != null; }
+    @Override public boolean hasNext() { return next != null; }
 
     @Override
     public PlanNode next() {

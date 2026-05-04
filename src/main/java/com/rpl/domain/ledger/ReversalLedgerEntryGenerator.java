@@ -2,12 +2,10 @@ package com.rpl.domain.ledger;
 
 import com.rpl.domain.*;
 import org.springframework.stereotype.Component;
-
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
-
 
 @Component
 public class ReversalLedgerEntryGenerator extends AbstractLedgerEntryGenerator {
@@ -20,16 +18,13 @@ public class ReversalLedgerEntryGenerator extends AbstractLedgerEntryGenerator {
     }
 
     @Override
-    protected void validate(List<ResourceAllocation> allocs) {
-
-    }
+    protected void validate(List<ResourceAllocation> allocs) { }
 
     @Override
     protected Entry buildWithdrawal(Transaction tx, ResourceAllocation a) {
-
         Entry e = new Entry();
         e.setAccount(a.getResourceType().getPoolAccount());
-        e.setAmount(a.getQuantity()); 
+        e.setAmount(a.getQuantity()); // positive = restore to pool
         e.setEntryType(Entry.EntryType.DEPOSIT);
         e.setChargedAt(LocalDateTime.now());
         e.setOriginatingAction(a.getAction());
@@ -39,7 +34,6 @@ public class ReversalLedgerEntryGenerator extends AbstractLedgerEntryGenerator {
 
     @Override
     protected Entry buildDeposit(Transaction tx, ResourceAllocation a) {
-        // Reversal: withdraw from usage account
         Entry e = new Entry();
         e.setAmount(a.getQuantity().negate());
         e.setEntryType(Entry.EntryType.WITHDRAWAL);

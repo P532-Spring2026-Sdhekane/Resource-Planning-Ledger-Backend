@@ -3,9 +3,6 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-/**
- * Week 2 - Change 1: New state entered via submitForApproval().
- */
 @Component
 public class PendingApprovalState implements ActionState {
 
