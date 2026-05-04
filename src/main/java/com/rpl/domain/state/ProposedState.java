@@ -3,16 +3,32 @@ package com.rpl.domain.state;
 import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
-/**
- * Stateless singleton bean representing PROPOSED state.
- * Legal transitions: implement(), suspend(), abandon().
- */
 @Component
 public class ProposedState implements ActionState {
 
     @Override
     public void implement(ActionContext ctx) {
-        ctx.setStatus(ActionStatus.IN_PROGRESS);
+        throw new IllegalStateTransitionException(name(), "implement");
+    }
+
+    @Override
+    public void submitForApproval(ActionContext ctx) {
+        ctx.setStatus(ActionStatus.PENDING_APPROVAL);
+    }
+
+    @Override
+    public void approve(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "approve");
+    }
+
+    @Override
+    public void reject(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "reject");
+    }
+
+    @Override
+    public void reopen(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "reopen");
     }
 
     @Override

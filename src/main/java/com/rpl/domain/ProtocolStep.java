@@ -38,6 +38,7 @@ public class ProtocolStep {
 
     public Long getId() { return id; }
     @JsonIgnore
+    @JsonIgnore
     public Protocol getProtocol() { return protocol; }
     public void setProtocol(Protocol protocol) { this.protocol = protocol; }
     public String getName() { return name; }

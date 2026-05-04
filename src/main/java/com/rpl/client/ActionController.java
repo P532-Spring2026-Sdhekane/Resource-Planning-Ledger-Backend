@@ -31,6 +31,26 @@ public class ActionController {
         return actionManager.implement(id);
     }
 
+    @PostMapping("/{id}/submit-for-approval")
+    public ProposedAction submitForApproval(@PathVariable Long id) {
+        return actionManager.submitForApproval(id);
+    }
+
+    @PostMapping("/{id}/approve")
+    public ProposedAction approve(@PathVariable Long id) {
+        return actionManager.approve(id);
+    }
+
+    @PostMapping("/{id}/reject")
+    public ProposedAction reject(@PathVariable Long id) {
+        return actionManager.reject(id);
+    }
+
+    @PostMapping("/{id}/reopen")
+    public ProposedAction reopen(@PathVariable Long id) {
+        return actionManager.reopen(id);
+    }
+
     @PostMapping("/{id}/complete")
     public ProposedAction complete(@PathVariable Long id) {
         return actionManager.complete(id);

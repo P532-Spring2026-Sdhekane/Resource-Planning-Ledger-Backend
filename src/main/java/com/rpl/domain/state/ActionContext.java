@@ -3,16 +3,12 @@ package com.rpl.domain.state;
 import com.rpl.domain.ProposedAction;
 import com.rpl.domain.composite.ActionStatus;
 
-/**
- * ActionContext wraps the ProposedAction entity (mutable data)
- * and a callback interface to the ActionManager so that state transitions
- * can trigger ledger operations without creating a circular dependency.
- * State objects are stateless singletons; all mutation goes through here.
- */
 public class ActionContext {
 
     public interface LedgerCallback {
+        void onImplement(ProposedAction action);
         void onComplete(ProposedAction action);
+        void onReopen(ProposedAction action);
         void onSuspend(ProposedAction action, String reason);
         void onResume(ProposedAction action);
     }
@@ -25,27 +21,12 @@ public class ActionContext {
         this.callback = callback;
     }
 
-    public ProposedAction getAction() {
-        return action;
-    }
-
-    public void setStatus(ActionStatus status) {
-        action.setStatusEnum(status);
-    }
-
-    public ActionStatus getStatus() {
-        return action.getStatusEnum();
-    }
-
-    public void triggerComplete() {
-        callback.onComplete(action);
-    }
-
-    public void triggerSuspend(String reason) {
-        callback.onSuspend(action, reason);
-    }
-
-    public void triggerResume() {
-        callback.onResume(action);
-    }
+    public ProposedAction getAction() { return action; }
+    public void setStatus(ActionStatus status) { action.setStatusEnum(status); }
+    public ActionStatus getStatus() { return action.getStatusEnum(); }
+    public void triggerImplement() { callback.onImplement(action); }
+    public void triggerComplete() { callback.onComplete(action); }
+    public void triggerReopen() { callback.onReopen(action); }
+    public void triggerSuspend(String reason) { callback.onSuspend(action, reason); }
+    public void triggerResume() { callback.onResume(action); }
 }

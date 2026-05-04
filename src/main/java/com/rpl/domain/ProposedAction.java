@@ -94,6 +94,7 @@ public class ProposedAction implements PlanNode {
 
     public void setName(String name) { this.name = name; }
     @JsonIgnore
+    @JsonIgnore
     public Plan getPlan() { return plan; }
     public void setPlan(Plan plan) { this.plan = plan; }
     public Protocol getProtocol() { return protocol; }

@@ -3,6 +3,7 @@ package com.rpl.client;
 import com.rpl.domain.Plan;
 import com.rpl.domain.ProposedAction;
 import com.rpl.manager.PlanManager;
+import java.util.Map;
 import org.springframework.web.bind.annotation.*;
 import java.time.LocalDate;
 import java.util.List;
@@ -39,6 +40,11 @@ public class PlanController {
             return planManager.createFromProtocol(protocolId, name, startDate);
         }
         return planManager.createPlan(name, startDate);
+    }
+
+    @GetMapping("/{id}/metrics")
+    public Map<String, Object> metrics(@PathVariable Long id) {
+        return planManager.getMetrics(id);
     }
 
     @GetMapping("/{id}/report")
