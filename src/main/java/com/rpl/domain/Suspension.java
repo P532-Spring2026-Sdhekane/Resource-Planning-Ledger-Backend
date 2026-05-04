@@ -32,7 +32,6 @@ public class Suspension {
 
     public Long getId() { return id; }
     @JsonIgnore
-    @JsonIgnore
     public ProposedAction getProposedAction() { return proposedAction; }
     public String getReason() { return reason; }
     public LocalDate getStartDate() { return startDate; }
