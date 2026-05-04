@@ -2,8 +2,6 @@ package com.rpl.manager;
 
 import com.rpl.domain.*;
 import com.rpl.domain.composite.PlanNode;
-import com.rpl.domain.visitor.*;
-import java.util.Map;
 import com.rpl.domain.iterator.DepthFirstPlanIterator;
 import com.rpl.repository.*;
 import jakarta.transaction.Transactional;
@@ -105,21 +103,4 @@ public class PlanManager {
     }
 
     public record ReportNode(Long id, String name, String type, String status) {}
-
-    public Map<String, Object> getMetrics(Long planId) {
-        Plan plan = findById(planId);
-        CompletionRatioVisitor completion = new CompletionRatioVisitor();
-        ResourceCostVisitor cost = new ResourceCostVisitor();
-        RiskScoreVisitor risk = new RiskScoreVisitor();
-        plan.accept(completion);
-        plan.accept(cost);
-        plan.accept(risk);
-        return Map.of(
-            "completionRatio", completion.getRatio(),
-            "completedActions", completion.getCompleted(),
-            "totalActions", completion.getTotal(),
-            "totalResourceCost", cost.getTotalCost(),
-            "riskScore", risk.getScore()
-        );
-    }
 }

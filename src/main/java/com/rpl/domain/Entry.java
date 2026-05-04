@@ -46,7 +46,6 @@ public class Entry {
 
     public Long getId() { return id; }
     @JsonIgnore
-    @JsonIgnore
     public Transaction getTransaction() { return transaction; }
     public void setTransaction(Transaction t) { this.transaction = t; }
     public Account getAccount() { return account; }
@@ -58,7 +57,6 @@ public class Entry {
     public LocalDateTime getChargedAt() { return chargedAt; }
     public void setChargedAt(LocalDateTime chargedAt) { this.chargedAt = chargedAt; }
     public LocalDateTime getBookedAt() { return bookedAt; }
-    @JsonIgnore
     @JsonIgnore
     public ProposedAction getOriginatingAction() { return originatingAction; }
     public void setOriginatingAction(ProposedAction a) { this.originatingAction = a; }

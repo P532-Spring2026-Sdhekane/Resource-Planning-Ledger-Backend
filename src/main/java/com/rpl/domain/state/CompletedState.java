@@ -1,35 +1,17 @@
 package com.rpl.domain.state;
 
-import com.rpl.domain.composite.ActionStatus;
 import org.springframework.stereotype.Component;
 
+/**
+ * Stateless singleton bean representing COMPLETED state (terminal).
+ * No transitions allowed.
+ */
 @Component
 public class CompletedState implements ActionState {
 
     @Override
     public void implement(ActionContext ctx) {
         throw new IllegalStateTransitionException(name(), "implement");
-    }
-
-    @Override
-    public void submitForApproval(ActionContext ctx) {
-        throw new IllegalStateTransitionException(name(), "submitForApproval");
-    }
-
-    @Override
-    public void approve(ActionContext ctx) {
-        throw new IllegalStateTransitionException(name(), "approve");
-    }
-
-    @Override
-    public void reject(ActionContext ctx) {
-        throw new IllegalStateTransitionException(name(), "reject");
-    }
-
-    @Override
-    public void reopen(ActionContext ctx) {
-        ctx.setStatus(ActionStatus.REOPENED);
-        ctx.triggerReopen();
     }
 
     @Override

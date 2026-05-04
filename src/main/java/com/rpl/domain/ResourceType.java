@@ -1,7 +1,6 @@
 package com.rpl.domain;
 
 import jakarta.persistence.*;
-import java.math.BigDecimal;
 
 @Entity
 @Table(name = "resource_types")
@@ -31,8 +30,6 @@ public class ResourceType {
     @JoinColumn(name = "alert_account_id")
     private Account alertAccount;
 
-    private BigDecimal unitCost = BigDecimal.ZERO;
-
     public ResourceType() {}
 
     public ResourceType(String name, Kind kind, String unitOfMeasure) {
@@ -52,6 +49,4 @@ public class ResourceType {
     public void setPoolAccount(Account poolAccount) { this.poolAccount = poolAccount; }
     public Account getAlertAccount() { return alertAccount; }
     public void setAlertAccount(Account alertAccount) { this.alertAccount = alertAccount; }
-    public BigDecimal getUnitCost() { return unitCost; }
-    public void setUnitCost(BigDecimal u) { this.unitCost = u; }
 }
