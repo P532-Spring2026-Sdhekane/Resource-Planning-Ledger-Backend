@@ -1,0 +1,62 @@
+package com.rpl.domain.state;
+
+import com.rpl.domain.composite.ActionStatus;
+import org.springframework.stereotype.Component;
+
+/**
+ * Week 2 - Change 1: New state entered via reopen() from COMPLETED.
+ * Legal transitions: complete() -> COMPLETED (re-posts ledger), abandon() -> ABANDONED.
+ * Reopening creates reversal entries to restore pool balance.
+ */
+@Component
+public class ReopenedState implements ActionState {
+
+    @Override
+    public void implement(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "implement");
+    }
+
+    @Override
+    public void submitForApproval(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "submitForApproval");
+    }
+
+    @Override
+    public void approve(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "approve");
+    }
+
+    @Override
+    public void reject(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "reject");
+    }
+
+    @Override
+    public void reopen(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "reopen");
+    }
+
+    @Override
+    public void suspend(ActionContext ctx, String reason) {
+        throw new IllegalStateTransitionException(name(), "suspend");
+    }
+
+    @Override
+    public void resume(ActionContext ctx) {
+        throw new IllegalStateTransitionException(name(), "resume");
+    }
+
+    @Override
+    public void complete(ActionContext ctx) {
+        ctx.setStatus(ActionStatus.COMPLETED);
+        ctx.triggerComplete();
+    }
+
+    @Override
+    public void abandon(ActionContext ctx) {
+        ctx.setStatus(ActionStatus.ABANDONED);
+    }
+
+    @Override
+    public String name() { return "REOPENED"; }
+}
